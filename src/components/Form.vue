@@ -31,11 +31,13 @@ export default defineComponent({
       description: ''
     }
   },
-  
+  emits: ['onSaveTask'],
   methods: {
     finishTask (time: number) : void {
-      console.log(time)
-      console.log(this.description)
+      this.$emit('onSaveTask', {
+        durationInSeconds: time,
+        description: this.description
+      })
       this.description = '';
     }
   }
