@@ -4,13 +4,7 @@
       <SideBar @onThemeSwitched="switchTheme" />
     </div>
     <div class='column is-three-quarter content'>
-      <Form @onSaveTask="saveTask" />
-      <div class="list">
-        <Task v-for="(task, i) in tasks" :key="i" :task="task" />
-        <Box v-if="listIsEmpty">
-          Você não está muito produtivo hoje :(
-        </Box>
-      </div>
+      <router-view></router-view>
     </div>
   </main>
 </template>
@@ -18,29 +12,16 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import SideBar from './components/SideBar.vue';
-import Form from './components/Form.vue';
-import Task from './components/Task.vue';
-import ITask from '@/interfaces/ITask'
-import Box from './components/Box.vue';
 
 export default defineComponent({
-  components: { SideBar, Form, Task, Box },
+  components: { SideBar },
   name: "App",
   data() {
     return {
-      tasks: [] as ITask[],
       darkModeActive: false
     }
   },
-  computed: {
-    listIsEmpty() :boolean {
-      return this.tasks.length === 0;
-    }
-  },
   methods: {
-    saveTask(task: ITask) {
-      this.tasks.push(task)
-    },
     switchTheme(mode: boolean) {
       this.darkModeActive = mode;
     }
