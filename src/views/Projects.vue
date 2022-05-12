@@ -3,35 +3,31 @@
     <h1 class="title">
     Projetos
   </h1>
-  <form @submit.prevent='save'>
-    <div class="field">
-      <label for="projectName" class="label">
-        Nome do projeto
-      </label>
-      <input 
-        type="text" 
-        class="input" 
-        v-model="projectName" 
-        id="projectName"
-      />
-    </div>
-    <div class="field">
-      <button class="button" type="submit">
-        Salvar
-      </button>
-    </div>
-  </form>
+  <router-link to="/projetos/novo" class="button">
+    <span class="icon is-small">
+      <i class="fas fa-plus"></i>
+    </span>
+    <span>Novo Projeto</span>
+  </router-link>
   <table class="table is-fullwidth">
     <thead>
       <tr>
         <th>ID</th>
         <th>Nome</th>
+        <th>Ações</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="project in projects" :key='project.id'>
         <td>{{ project.id }}</td>
         <td>{{ project.name }}</td>
+        <td>
+          <router-link :to="`/projetos/${project.id}`" class="button">
+            <span class="icon is-small">
+              <i class="fas fa-pencil-alt"></i>
+            </span>
+          </router-link>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -39,26 +35,16 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue';
-import IProject from '@/interfaces/IProject';
+import { computed, defineComponent } from 'vue';
+import { myUseStore } from '@/store';
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Projects',
-  data() {
+  setup() {
+    const store = myUseStore();
     return {
-      projectName: '',
-      projects: [] as IProject[]
-    }
-  },
-  methods: {
-    save() {
-      const project: IProject = {
-        name: this.projectName,
-        id: new Date().toISOString()
-      }
-      this.projects.push(project);
-      this.projectName = '';
+      projects: computed(() => store.state.projects)
     }
   }
 })
