@@ -1,8 +1,5 @@
 <template>
-  <section class="projects">
-    <h1 class="title">
-    Projetos
-  </h1>
+  <section>
   <form @submit.prevent='save'>
     <div class="field">
       <label for="projectName" class="label">
@@ -27,6 +24,8 @@
 <script lang='ts'>
 import { defineComponent } from 'vue';
 import { myUseStore } from '@/store';
+import { ADD_PROJECT, ALTER_PROJECT, NOTIFY } from '@/store/mutations_type';
+import { notificationType } from '@/interfaces/INotification';
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -50,14 +49,19 @@ export default defineComponent({
   methods: {
     save() {
       if(this.id){
-        this.store.commit('ALTER_PROJECT', {
+        this.store.commit(ALTER_PROJECT, {
           id: this.id,
           name: this.projectName
         });
       } else {
-        this.store.commit('ADD_PROJECT', this.projectName);
+        this.store.commit(ADD_PROJECT, this.projectName);
       }
       this.projectName = '';
+      this.store.commit(NOTIFY, {
+        title: 'Novo projeto adicionado',
+        text: 'Só dale',
+        type: notificationType.SUCCESS
+      })
       this.$router.push('/projetos')
     }
   },
@@ -69,9 +73,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped>
-.projects {
-  padding: 1.25rem;
-}
-</style>
