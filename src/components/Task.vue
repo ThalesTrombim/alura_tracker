@@ -4,6 +4,9 @@
       <div class="column is-7">
         {{ task.description || 'Tarefa sem descrição' }}
       </div>
+      <div class="column is-3">
+        {{ task.project?.name || 'N/D'}}
+      </div>
       <div class="column">
         <Counter :timeInSeconds="task.durationInSeconds"/>
       </div>

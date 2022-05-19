@@ -24,8 +24,9 @@
 <script lang='ts'>
 import { defineComponent } from 'vue';
 import { myUseStore } from '@/store';
-import { ADD_PROJECT, ALTER_PROJECT, NOTIFY } from '@/store/mutations_type';
+import { ADD_PROJECT, ALTER_PROJECT } from '@/store/mutations_type';
 import { notificationType } from '@/interfaces/INotification';
+import useNotificator from '@/hooks/notificator';
 
 export default defineComponent({
   // eslint-disable-next-line vue/multi-word-component-names
@@ -57,18 +58,16 @@ export default defineComponent({
         this.store.commit(ADD_PROJECT, this.projectName);
       }
       this.projectName = '';
-      this.store.commit(NOTIFY, {
-        title: 'Novo projeto adicionado',
-        text: 'Só dale',
-        type: notificationType.SUCCESS
-      })
+      this.notify(notificationType.SUCCESS, 'Excelente', 'O projeto foi cadastrado com sucesso')
       this.$router.push('/projetos')
     }
   },
   setup() {
     const store = myUseStore();
+    const { notify } = useNotificator()
     return {
-      store
+      store,
+      notify
     }
   }
 })
